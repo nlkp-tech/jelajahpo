@@ -1,5 +1,6 @@
 const exprees = require('express');
 const jwt = require('jsonwebtoken');
+const authJWT = require('./middleware');
 const cors = require('cors');
 const app = exprees();
 const mysql = require('mysql2');
@@ -76,7 +77,7 @@ app.post('/wisata', (req, res) => {
     });
 });
 
-app.put('/wisata/:id_wisata', (req, res) => {
+app.put('/wisata/:id_wisata', authJWT, (req, res) => {
     const { id_wisata } = req.params;
     const { nama_wisata, deskripsi, harga_tiket, id_kategori } = req.body;
 
@@ -94,7 +95,7 @@ app.put('/wisata/:id_wisata', (req, res) => {
     });
 });
 
-app.delete('/wisata/:id_wisata', (req, res) => {
+app.delete('/wisata/:id_wisata', authJWT, (req, res) => {
     const { id_wisata } = req.params;
     const sql = 'DELETE FROM wisata WHERE id_wisata=?';
     db.query(sql, [id_wisata], (err, result) => {
