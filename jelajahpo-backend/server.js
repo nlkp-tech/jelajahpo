@@ -29,7 +29,7 @@ app.get('/', (req, res) => {
 app.post('/wisata', (req, res) => {
     const { nama_wisata, deskripsi, harga_tiket, id_kategori } = req.body;
 
-    if (!deskripsi || !harga_tiket ) {
+    if (!deskripsi || !harga_tiket) {
         return res.status(400).json({ message: 'Nama Wisata dan Harga Tiket wajib diisi' });
     }
 
@@ -52,9 +52,24 @@ app.put('/wisata/:id_wisata', (req, res) => {
     }
 
     const sql = 'UPDATE wisata SET nama_wisata=?, deskripsi=?, harga_tiket=?, id_kategori=? WHERE id_wisata=?';
-    db.query(sql, [nama_wisata, deskripsi, harga_tiket,id_kategori, id_wisata], (err, result) => {
+    db.query(sql, [nama_wisata, deskripsi, harga_tiket, id_kategori, id_wisata], (err, result) => {
         if (err) return res.status(500).json({ error: err.sqlMessage });
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: 'Wisata tidak ditemukan' })
+        }
         res.json({ message: 'Wisata berhasil diupdate!' });
+    });
+});
+
+app.delete('/wisata/:id_wisata', (req, res) => {
+    const { id_wisata } = req.params;
+    const sql = 'DELETE FROM wisata WHERE id_wisata=?';
+    db.query(sql, [id_wisata], (err, result) => {
+        if (err) return res.status(500).json({ error: err.sqlMessage });
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: 'Wisata tidak ditemukan' })
+        }
+        res.json({ message: 'Wisata berhasil dihapus!' });
     });
 });
 
