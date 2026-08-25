@@ -22,6 +22,29 @@ export default function wisata() {
         getWisata();
     }, []);
 
+    const handleDelete = async (id) => {
+        if (window.confirm("Yakin ingin menghapus wisata ini?")) {
+            try {
+                const res = await fetch(`http://localhost:5000/wisata/${id}`, {
+                    method: "DELETE",
+                });
+                if (res.ok) {
+                    alert("Wisata berhasil dihapus");
+                    getWisata();
+                } else {
+                    alert("Gagal mengahpus wisata");
+                }
+            } catch (err) {
+                console.error("Error saat delete:", err);
+                alert("Terjadi kesalahan saat menghapus data");
+            }
+        }
+    };
+
+    const handleEdit = (id) => {
+        Navigate(`/wisata/edit/${id}`);
+    };
+
     if (loading) {
         return <div className="container mt-4">Sedang memuat data...</div>;
     }
@@ -41,6 +64,7 @@ export default function wisata() {
                         <th>Nama Wisata</th>
                         <th>Deskripsi</th>
                         <th>Harga Tiket</th>
+                        <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -51,6 +75,11 @@ export default function wisata() {
                                 <td>{item.nama_wisata}</td>
                                 <td>{item.deskripsi}</td>
                                 <td>Rp {item.harga_tiket}</td>
+
+                                <td>
+                                    <button className="btn btn-warning btn-sm me-2" onClick={() => handleEdit(item.id_wisata)}>Edit</button>
+                                    <button className="btn btn-danger btn-sm" onClick={() => handleDelete(item.id_wisata)}>Delete</button>
+                                </td>
                             </tr>
                         ))
                     ) : (
