@@ -1,4 +1,5 @@
 const exprees = require('express');
+const jwt = require('jsonwebtoken');
 const cors = require('cors');
 const app = exprees();
 const mysql = require('mysql2');
@@ -24,6 +25,38 @@ app.use(exprees.json());
 
 app.get('/', (req, res) => {
     res.send('Selamat Datang di JelajahPo API');
+});
+
+app.post('/login', (req, res) => {
+    const { email, password } = req.body;
+    const sql = 'SELECT * FROM pengguna WHERE email = ?';
+
+    db.query(sql, [email], (err, result) => {
+        if (err) return res.status(500).json({ error: err.sqlMessage });
+        if (result.length === 0) {
+            return res.status(404).json({ message: 'Akun tidak ditemukan' });
+        }
+
+        const user = result[0];
+        const passwordIsValid = bcrypt.compareSync(password, user.password);
+
+        if (!passwordIsValid) {
+            return res.status(401).json({ message: 'Passowrd salah' });
+        }
+
+        const token = jwt.sign(
+            { id: user.id_pengguna },
+            'jelajahporahasia',
+            { expiresIn: 86400 }
+        );
+
+        res.status(200).json({
+            auth: true,
+            token,
+            id_pengguna: user.id_pengguna,
+            nama: user.nama
+        });
+    });
 });
 
 app.post('/wisata', (req, res) => {
