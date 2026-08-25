@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function wisata() {
     const [wisata, setWisata] = useState([]);
     const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
 
 
     const getWisata = async () => {
@@ -42,7 +43,7 @@ export default function wisata() {
     };
 
     const handleEdit = (id) => {
-        Navigate(`/wisata/edit/${id}`);
+        navigate(`/wisata/edit/${id}`);
     };
 
     if (loading) {
