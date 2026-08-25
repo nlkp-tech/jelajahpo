@@ -1,4 +1,5 @@
 const exprees = require('express');
+const cors = require('cors');
 const app = exprees();
 const mysql = require('mysql2');
 const db = mysql.createConnection({
@@ -18,10 +19,28 @@ db.connect(err => {
 
 const PORT = 5000;
 
+app.use(cors());
 app.use(exprees.json());
 
 app.get('/', (req, res) => {
     res.send('Selamat Datang di JelajahPo API');
+});
+
+app.post('/wisata', (req, res) => {
+    const { nama_wisata, deskripsi, harga_tiket, id_kategori } = req.body;
+
+    if (!deskripsi || !harga_tiket ) {
+        return res.status(400).json({ message: 'Nama Wisata dan Harga Tiket wajib diisi' });
+    }
+
+    const sql = 'INSERT INTO wisata (nama_wisata, deskripsi, harga_tiket, id_kategori, tgl_input) VALUES (?,?,?,?, NOW())';
+    db.query(sql, [nama_wisata, deskripsi, harga_tiket, id_kategori], (err, result) => {
+        if (err) return res.status(500).json({ error: err.sqlMessage });
+        res.json({
+            message: 'Wisata berhasil ditambah!',
+            id_wisata: result.insertId
+        });
+    });
 });
 
 app.get('/wisata', (req, res) => {
