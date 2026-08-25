@@ -43,6 +43,21 @@ app.post('/wisata', (req, res) => {
     });
 });
 
+app.put('/wisata/:id_wisata', (req, res) => {
+    const { id_wisata } = req.params;
+    const { nama_wisata, deskripsi, harga_tiket, id_kategori } = req.body;
+
+    if (!nama_wisata || !harga_tiket) {
+        return res.status(400).json({ message: 'Nama Wisata dan harga tiket wajib diisi' });
+    }
+
+    const sql = 'UPDATE wisata SET nama_wisata=?, deskripsi=?, harga_tiket=?, id_kategori=? WHERE id_wisata=?';
+    db.query(sql, [nama_wisata, deskripsi, harga_tiket,id_kategori, id_wisata], (err, result) => {
+        if (err) return res.status(500).json({ error: err.sqlMessage });
+        res.json({ message: 'Wisata berhasil diupdate!' });
+    });
+});
+
 app.get('/wisata', (req, res) => {
     const sql = 'SELECT * FROM wisata';
     db.query(sql, (err, results) => {
