@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-export default function wisata() {
+export default function Wisata() {
     const [wisata, setWisata] = useState([]);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
@@ -28,6 +28,9 @@ export default function wisata() {
             try {
                 const res = await fetch(`http://localhost:5000/wisata/${id}`, {
                     method: "DELETE",
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    },
                 });
                 if (res.ok) {
                     alert("Wisata berhasil dihapus");
@@ -85,7 +88,7 @@ export default function wisata() {
                         ))
                     ) : (
                         <tr>
-                            <td colSpan="4" className="text-center">
+                            <td colSpan="5" className="text-center">
                                 Belum ada Wisata
                             </td>
                         </tr>
