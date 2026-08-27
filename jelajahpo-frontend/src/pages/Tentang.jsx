@@ -1,3 +1,10 @@
 export default function Tentang() {
-    return <h2>Haii Namaku Nadine lathifa kharisma putri kelas XII RPL 2 Destinasi wisata favorit yang ingin saya kunjungi yaitu Dieng </h2>;
+  return (
+    <div>
+      <h2>Haii!</h2>
+      <p>Namaku Nadine Lathifa Kharisma Putri</p>
+      <p>Kelas XII RPL 2</p>
+      <p>Destinasi wisata favorit yang ingin saya kunjungi yaitu Dieng.</p>
+    </div>
+  );
 }
