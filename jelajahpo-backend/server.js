@@ -85,8 +85,6 @@ app.put('/wisata/:id_wisata', authJWT, uploads.single('file'), (req, res) => {
             message: 'Nama Wisata dan harga tiket wajib diisi'
         });
     }
-
-    // Jika ada foto baru
     if (req.file) {
         const nama_file = req.file.filename;
 
@@ -149,7 +147,6 @@ app.put('/wisata/:id_wisata', authJWT, uploads.single('file'), (req, res) => {
         );
     }
 });
-
 
 app.delete('/wisata/:id_wisata', authJWT, (req, res) => {
     const { id_wisata } = req.params;
